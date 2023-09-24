@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { RootRoutes, Rx } from "src/route/config";
 
 function App() {
+  function getConfig(config?: Rx[]) {
+    if (config?.length <= 0) return '';
+    return (
+      <Switch>
+        {config.map((n) => {
+          const Element = n.element;
+          const children = n.children;
+          return (
+            <Route path={n.path}>
+              <Element />
+              {getConfig(n.children)}
+            </Route>
+          );
+        })}
+      </Switch>
+    );
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        {getConfig(RootRoutes)}
+      </BrowserRouter>
     </div>
   );
 }
