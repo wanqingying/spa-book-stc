@@ -2,20 +2,19 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
-import { RootRoutes, Rx } from "src/route/config";
+import { RootRoutes, RouteType } from "src/route/config";
 
 function App() {
-  function getConfig(config?: Rx[]) {
-    if (config?.length <= 0) return '';
+  function getConfig(config?: RouteType[]) {
+    if (!config || config?.length <= 0) return "";
     return (
       <Switch>
         {config.map((n) => {
           const Element = n.element;
           const children = n.children;
           return (
-            <Route path={n.path}>
-              <Element />
-              {getConfig(n.children)}
+            <Route path={n.path} key={n.path}>
+              <Element>{getConfig(n.children)}</Element>
             </Route>
           );
         })}
@@ -24,9 +23,7 @@ function App() {
   }
   return (
     <div className="App">
-      <BrowserRouter>
-        {getConfig(RootRoutes)}
-      </BrowserRouter>
+      <BrowserRouter>{getConfig(RootRoutes)}</BrowserRouter>
     </div>
   );
 }
